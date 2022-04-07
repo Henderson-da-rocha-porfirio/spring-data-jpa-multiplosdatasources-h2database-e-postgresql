@@ -19,10 +19,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration		// Usar a anotação @Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "cupomEntityManagerFactory",
-transactionManagerRef = "cupomTransactionManager", basePackages = {
-		"com.bharath.springdatajpa.cupom" })
+@EnableTransactionManagement														// Habilita a transação: EnableTransactionManagement
+@EnableJpaRepositories(entityManagerFactoryRef = "cupomEntityManagerFactory",		// @EnableJpaRepositories - faz referência EntityManagerFactory com entityManagerFactoryRef
+transactionManagerRef = "cupomTransactionManager", basePackages = {					// Agora ele pega o TransactionManager que pega o controle da base da transação
+		"com.tuyo.multiplosdatasources.cupom" })									// Aqui ele pega o pacote(package) base do projeto. Os pacotes serão escaneados e agirão conforme o esperado.
 public class CupomDataSourceConfig {
 
 	@Primary 												// @Primary = significa que é o primeiro datasource que estou configurando. E todos os métodos serão marcados como primários e terão poder de controlar um import e etc.
@@ -39,18 +39,17 @@ public class CupomDataSourceConfig {
 				.type(HikariDataSource.class).build();		// Especifica que tem um datasource tipo Hikari
 	}
 
-	@Primary
+	@Primary												// EntityManagerFactory config
 	@Bean(name = "cupomEntityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean cupomEntityManagerFactoryBuilder(
-			EntityManagerFactoryBuilder builder) {
+	public LocalContainerEntityManagerFactoryBean cupomEntityManagerFactoryBuilder(EntityManagerFactoryBuilder builder) {	//Aqui é retornado um container Local.
 		return builder.dataSource(cupomDataSource()).packages(Cupom.class).build();
 	}
 
 	@Primary
-	@Bean(name = "cupomTransactionManager")
+	@Bean(name = "cupomTransactionManager")					// Criado o TransactionManager
 	public PlatformTransactionManager cupomTransactionManager(
-			@Qualifier("cupomEntityManagerFactory") EntityManagerFactory cupomEntityManagerFactory) {
-		return new JpaTransactionManager(cupomEntityManagerFactory);
-	}
+			@Qualifier("cupomEntityManagerFactory") EntityManagerFactory cupomEntityManagerFactory) {		// @Qualifier = é usado alí dentro para especificar o nome Bean de de cupomEntityManagerFactory. A fim de que esse seja injetado automaticamente alí.
+		return new JpaTransactionManager(cupomEntityManagerFactory);										// Toda a conversão que está ocorrendo aqui, significa que estamos pegando de uma entidade container local: LocalContainerEntityManagerFactoryBean alí de cima,
+	}																										// E daí o Spring embrulha (to wrap) tudo isso com cuidado e passa neste método EntityManagerFactory.
 
 }

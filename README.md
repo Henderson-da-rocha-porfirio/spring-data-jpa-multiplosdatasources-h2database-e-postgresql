@@ -11,6 +11,5 @@
 #### - Properties
 #### - DataSource
 #### - EntityManagerFactory
-#### - Factory
 #### - TransactionManager
 #### - E tudo feito separadamente para cada Database.

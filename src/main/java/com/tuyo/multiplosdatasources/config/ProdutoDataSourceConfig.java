@@ -20,34 +20,34 @@ import java.util.HashMap;
 
 @Configuration						// Usar a anotação @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "productEntityManagerFactory", transactionManagerRef = "productTransactionManager", basePackages = {
-		"com.bharath.springdatajpa.produto" })
+@EnableJpaRepositories(entityManagerFactoryRef = "produtoEntityManagerFactory", transactionManagerRef = "produtoTransactionManager", basePackages = {
+		"com.tuyo.multiplosdatasources.produto" })
 public class ProdutoDataSourceConfig {
 
-	@Bean(name = "productDataSourceProperties")
+	@Bean(name = "produtoDataSourceProperties")
 	@ConfigurationProperties("spring.datasource-produto")
-	public DataSourceProperties productDataSourceProperties() {
+	public DataSourceProperties produtoDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
-	@Bean(name = "productDataSource")
-	public DataSource productDataSource() {
-		return productDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
+	@Bean(name = "produtoDataSource")
+	public DataSource produtoDataSource() {
+		return produtoDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
 	}
 
-	@Bean(name = "productEntityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean productEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+	@Bean(name = "produtoEntityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean produtoEntityManagerFactory(EntityManagerFactoryBuilder builder) {
 
-		HashMap<String, String> productJpaProperties = new HashMap<>();
-		//productJpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");
-		return builder.dataSource(productDataSource()).packages(Produto.class).persistenceUnit("productDataSource")
-				.properties(productJpaProperties).build();
+		HashMap<String, String> produtoJpaProperties = new HashMap<>();					// Para fazer Customizações ou passar alguma propriedade do Hibernate, como criar ou 'dropar' tabelas automaticamente. HashMap faz a controller ir a uma nova variável local chamada produtoJpaProperties
+		produtoJpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");			// Isso automaticamente cria tabelas.
+		return builder.dataSource(produtoDataSource()).packages(Produto.class).persistenceUnit("produtoDataSource")
+				.properties(produtoJpaProperties).build();
 	}
 
-	@Bean(name = "productTransactionManager")
-	public PlatformTransactionManager productTransactionManager(
-			@Qualifier("productEntityManagerFactory") EntityManagerFactory productEntityManagerFactory) {
-		return new JpaTransactionManager(productEntityManagerFactory);
+	@Bean(name = "produtoTransactionManager")
+	public PlatformTransactionManager produtoTransactionManager(
+			@Qualifier("produtoEntityManagerFactory") EntityManagerFactory produtoEntityManagerFactory) {
+		return new JpaTransactionManager(produtoEntityManagerFactory);
 	}
 
 }
