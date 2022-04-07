@@ -7,4 +7,4 @@ preco decimal(8,3)
 
 SELECT * FROM produto;
 
-DROP TABLE product;
+DROP TABLE produto;
