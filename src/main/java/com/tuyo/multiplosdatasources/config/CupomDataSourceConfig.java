@@ -18,39 +18,39 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-@Configuration
+@Configuration		// Usar a anotação @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "couponEntityManagerFactory", 
-transactionManagerRef = "couponTransactionManager", basePackages = {
+@EnableJpaRepositories(entityManagerFactoryRef = "cupomEntityManagerFactory",
+transactionManagerRef = "cupomTransactionManager", basePackages = {
 		"com.bharath.springdatajpa.cupom" })
 public class CupomDataSourceConfig {
 
-	@Primary
-	@Bean(name = "couponDataSourceProperties")
-	@ConfigurationProperties("spring.datasource-cupom")
-	public DataSourceProperties couponDataSourceProperties() {
+	@Primary 												// @Primary = significa que é o primeiro datasource que estou configurando. E todos os métodos serão marcados como primários e terão poder de controlar um import e etc.
+	@Bean(name = "cupomDataSourceProperties")				// Beans podem receber os nomes com "".
+	@ConfigurationProperties("spring.datasource-cupom")  // informa que estamos utilizando as configs do application.properties referente. E providenciamos a chave: spring.datasource-cupom
+	public DataSourceProperties cupomDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
 	@Primary
-	@Bean(name = "couponDataSource")
-	public DataSource couponDataSource() {
-		return couponDataSourceProperties().initializeDataSourceBuilder()
-				.type(HikariDataSource.class).build();
+	@Bean(name = "cupomDataSource")
+	public DataSource cupomDataSource() {					// DataSource Builder será criado para criar um data source e especificar o seu tipo.
+		return cupomDataSourceProperties().initializeDataSourceBuilder()
+				.type(HikariDataSource.class).build();		// Especifica que tem um datasource tipo Hikari
 	}
 
 	@Primary
-	@Bean(name = "couponEntityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean couponEntityManagerFactoryBuilder(
+	@Bean(name = "cupomEntityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean cupomEntityManagerFactoryBuilder(
 			EntityManagerFactoryBuilder builder) {
-		return builder.dataSource(couponDataSource()).packages(Cupom.class).build();
+		return builder.dataSource(cupomDataSource()).packages(Cupom.class).build();
 	}
 
 	@Primary
-	@Bean(name = "couponTransactionManager")
-	public PlatformTransactionManager couponTransactionManager(
-			@Qualifier("couponEntityManagerFactory") EntityManagerFactory couponEntityManagerFactory) {
-		return new JpaTransactionManager(couponEntityManagerFactory);
+	@Bean(name = "cupomTransactionManager")
+	public PlatformTransactionManager cupomTransactionManager(
+			@Qualifier("cupomEntityManagerFactory") EntityManagerFactory cupomEntityManagerFactory) {
+		return new JpaTransactionManager(cupomEntityManagerFactory);
 	}
 
 }
