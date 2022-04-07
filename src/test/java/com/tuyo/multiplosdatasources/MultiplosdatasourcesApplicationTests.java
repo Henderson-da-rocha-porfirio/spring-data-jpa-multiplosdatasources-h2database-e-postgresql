@@ -20,22 +20,22 @@ class MultiplosdatasourcesApplicationTests {
 	ProdutoRepo produtoRepo;
 
 	@Test
-	void testSaveCoupon() {
+	void testSaveCupom() {
 		Cupom coupon = new Cupom();
-		coupon.setCodigo("SUPERVENDA");
+		coupon.setCodigo("SUPERVENDASS");
 		coupon.setDesconto(new BigDecimal(20));
-		coupon.setExpDate("22/22/2022");
+		coupon.setExpDate("02/22/2022"); 					// não importa a ordem ou a existência. Será gerado automaticamente.
 		System.out.println(cupomRepo.save(coupon));
 	}
 
 	@Test
 	void testSaveProduto() {
-		Produto product = new Produto();
-		product.setNome("NOTEBOOK DELL");
-		product.setDescricao("Its Cool");
-		product.setPreco(new BigDecimal(2000));
-		product.setCupomCodigo("SUPERVENDA");
-		System.out.println(produtoRepo.save(product));
+		Produto produto = new Produto();
+		produto.setNome("NOTEBOOK DELL");
+		produto.setDescricao("Its Cool");
+		produto.setPreco(new BigDecimal(2000));
+		produto.setCupomCodigo("SUPERVENDA");
+		System.out.println(produtoRepo.save(produto));
 	}
 
 }
