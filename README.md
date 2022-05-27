@@ -13,3 +13,12 @@
 #### - EntityManagerFactory
 #### - TransactionManager
 #### - E tudo feito separadamente para cada Database.
+
+### Dependência
+````
+<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+</dependency>
+````
